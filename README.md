@@ -14,29 +14,30 @@ You are given a solution template that includes the main function that implement
 
 Specific assignment steps are:
 
-1. Background modeling (5 Pts.) - In the given BGModel() class (background_model.py), you are to implement the following background subtraction methods:
+* Background modeling (5 Pts.) - In the given BGModel() class (background_model.py), you are to implement the following background subtraction methods:
   
-    a. Background model estimated by computing the mean value of observed image intensity for each pixel
+    	a. Background model estimated by computing the mean value of observed image intensity for each pixel
     
-    b. Background model estimated by computing the median of observed image intensity for each pixel
+    	b. Background model estimated by computing the median of observed image intensity for each pixel
     
-    c. Background model estimated by modeling each pixel’s intensity as a Gaussian (mean and variance) 
+    	c. Background model estimated by modeling each pixel’s intensity as a Gaussian (mean and variance) 
     
-    d. Background model estimated by modeling each pixel’s intensity as a Mixture of Gaussians (can use cv2.createBackgroundSubtractorMOG2())
+    	d. Background model estimated by modeling each pixel’s intensity as a Mixture of Gaussians (can use cv2.createBackgroundSubtractorMOG2())
     
-    e. Background model estimated by modeling each pixel’s intensity based on Nearest Neighbor estimate of observed intensities (can use cv2. createBackgroundSubtractorKNN())
+    	e. Background model estimated by modeling each pixel’s intensity based on Nearest Neighbor estimate of observed intensities (can use cv2. createBackgroundSubtractorKNN())
 
 **Note that the specific computation of the foreground image after background subtraction should be performed in the compute_fgmask() method
 **
 
-2.	Object detection (20 Pts.) - In the given Detectors() class (detectors.py), you are to implement an approach to detect objects for tracking and their centroid values.
+* Object detection (20 Pts.) - In the given Detectors() class (detectors.py), you are to implement an approach to detect objects for tracking and their centroid values.
   - The detector should allow for use of one of the background subtraction methods and get the foreground image.  This should be further processed to detect objects worthy of tracking.
   - Your choice of processing to detect objects and compute their centroids should be implemented in the Detect() method within the class. (Please note that this does not require classifier based detection of objects)
 
-3.  You should not modify the following files:
-4.            cv_hw4.py, kalman_filter.py and tracker.py files.
+* You should not modify the following files:
 
-4.	Report (5 Pts.) - Write a report outlining your approach for background subtraction and object detection.
+		cv_hw4.py, kalman_filter.py and tracker.py files.
+
+* Report (5 Pts.) - Write a report outlining your approach for background subtraction and object detection.
   - Discuss which background model is better, and why. 
   - Discuss how different background model effects your detection. 
   - Describe the disadvantage of your detection, and discuss the potential improvement you can think of.
@@ -73,3 +74,4 @@ Grading:
 1. Report                 - 5 Pts. 
 
 Total                 - 30 Pts.
+=======

@@ -152,7 +152,7 @@ def main():
             cv2.putText(last_frame, text, (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
 
             # Write the result image
-            result_file = "TrackingResult-"+args["bgmodel"]+".png"
+            result_file = "output/TrackingResult-"+args["bgmodel"]+".png"
             cv2.imwrite(result_file, last_frame)
 
             # Display the resulting tracking frame
