@@ -64,8 +64,16 @@ General Instructions:
 Submission Instructions:
 
 1. Submit only the source code files.
-1. The TA will have the OpenCV setup in his development environment and will paste your code and run it. Do not use any third-party libraries as the TA will not have access to it. 
 1. Include a readme file to describe any required set up, like location of image files that was hard coded, or any other information that is required to run the code
+1. Make sure your final submission is running on circleci. The TA will use CircleCI output and your github code for grading. TA will not be able to grade if the code does not run on circle CI.
+
+Common reasons for failure:
+
+* Do not use any 3rd party libraries or functions. 
+* Do not display images in your final submission. Example, cv2.imshow(), cv2.waitkey(), cv2.NamedWindow will make the circle ci fail.
+* Do not read or write images with cv2.imread and cv2.imwrite, make sure you delete them in the final submission. 
+* Files not to be changed: requirements.txt and .circleci directory.
+
 
 Grading:
 
