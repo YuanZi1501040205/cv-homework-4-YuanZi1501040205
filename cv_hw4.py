@@ -74,7 +74,7 @@ def main():
             last_frame = copy.copy(frame)
 
             # Detect and return centroids of the objects in the frame
-            centers = detector.DetectBlob(frame)
+            centers = detector.Detect(frame)
 
             # If centroids are detected then track them
             if (len(centers) > 0):
@@ -144,16 +144,17 @@ def main():
                         cv2.line(last_frame, (int(x1), int(y1)), (int(x2), int(y2)),
                                  track_colors[clr], 2)
 
-            text = "Total Objects Detected and Tracked: {}".format(tracked_object_count)
-            cv2.putText(last_frame, text, (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
-            text = "Total Video Frames: {}".format(frame_count)
-            cv2.putText(last_frame, text, (10, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
-            text = "Background Model: {}".format(args["bgmodel"])
-            cv2.putText(last_frame, text, (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+            text1 = "Total Objects Detected and Tracked: {}".format(tracked_object_count)
+            cv2.putText(last_frame, text1, (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+            text2 = "Total Video Frames: {}".format(frame_count)
+            cv2.putText(last_frame, text2, (10, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+            text3 = "Background Model: {}".format(args["bgmodel"])
+            cv2.putText(last_frame, text3, (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
 
             # Write the result image
             result_file = "output/TrackingResult-"+args["bgmodel"]+".png"
             cv2.imwrite(result_file, last_frame)
+            print(text1+"\n"+text2+"\n"+text3)
 
             # Display the resulting tracking frame
             if debug == 1:
