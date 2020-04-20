@@ -4,7 +4,6 @@ import cv2
 import copy
 from qil.detectors import Detectors
 from qil.tracker import Tracker
-import imutils
 import argparse
 
 
