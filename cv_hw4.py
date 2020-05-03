@@ -71,8 +71,7 @@ def main():
             # Make copy of original frame
             orig_frame = copy.copy(frame)
             last_frame = copy.copy(frame)
-            if frame != None:
-                print("frame ! = None")
+
             # Detect and return centroids of the objects in the frame
             centers = detector.Detect(frame)
 
