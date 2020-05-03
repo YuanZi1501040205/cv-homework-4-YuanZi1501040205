@@ -24,15 +24,15 @@ class BGModel(object):
         """
         # Start implementation here
         if bgmodel == "mean":
-            backSub = createBackgroundSubtractorMEAN()
+            self.backSub = createBackgroundSubtractorMEAN()
         elif bgmodel == "median":
-            backSub = createBackgroundSubtractorMEDIAN()
+            self.backSub = createBackgroundSubtractorMEDIAN()
         elif bgmodel == "gaussian":
-            backSub = createBackgroundSubtractorGAUSSIAN()
+            self.backSub = createBackgroundSubtractorGAUSSIAN()
         elif bgmodel == "mog":
-            backSub = cv2.createBackgroundSubtractorMOG2()
+            self.backSub = cv2.createBackgroundSubtractorMOG2()
         elif bgmodel == "knn":
-            backSub = cv2.createBackgroundSubtractorKNN()
+            self.backSub = cv2.createBackgroundSubtractorKNN()
         else:
             print("Background model assign Error!")
             pass

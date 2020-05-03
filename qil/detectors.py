@@ -2,7 +2,7 @@
 import numpy as np
 import cv2
 from qil.background_model import BGModel
-
+import copy
 
 class Detectors(object):
     """Detectors class to detect objects in video frame
@@ -37,7 +37,8 @@ class Detectors(object):
             centers: vector of object centroids in a frame
         """
         # Start implementation here and make sure to return vector of object centroids in a frame
-        fgMask = BGModel.compute_fgmask(frame)
+        frame = copy.copy(frame)
+        fgMask = BGModel.compute_fgmask(self, frame)
 
         # morphological operation to erase the noise resulted by background subtraction
         kernel = np.ones((1, 1), np.uint8)
