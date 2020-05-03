@@ -10,9 +10,6 @@ class BGModel(object):
     Attributes:
         None
     """
-
-
-
     def __init__(self, bgmodel):
         """Initialize variables necessary for different models for background modeling
         Args:
@@ -39,8 +36,6 @@ class BGModel(object):
         else:
             print("Background model assign Error!")
             pass
-
-
 
     def compute_fgmask(self, frame):
         """Method that implements calculation of the foreground objects
@@ -196,3 +191,98 @@ def createBackgroundSubtractorGAUSSIAN():
 
         return(fgMask)
 
+# # %%debug read all videos
+# import numpy as np
+# import cv2
+# from scipy.stats import norm
+# global previous_frames  # variable to store the previous frames for background model calculation
+# previous_frames = []
+# frame_count = 0
+# cap = cv2.VideoCapture("QIL_orig.mp4")
+# while (True):
+#     # Capture frame-by-frame
+#     ret, inside_frame = cap.read()
+#     if ret:
+#         inside_frame = cv2.cvtColor(inside_frame, cv2.COLOR_BGR2GRAY)
+#         previous_frames.append(inside_frame)
+#         frame_count += 1
+#         # Display the original frame
+#         cv2.imshow('Original', inside_frame)
+#
+#         # Slower the FPS
+#         cv2.waitKey(1)
+#     else:
+#         break
+# cap.release()
+# cv2.destroyAllWindows()
+# #%%
+# n = 10
+# i = 0
+# previous_f = []
+# frame = previous_frames[20]
+# w, h = frame.shape[0], frame.shape[1]
+# for i in range(20):
+#     # read the previous frames and store them in a n query
+#     if np.shape(previous_f)[0] < n:
+#         previous_f.append(previous_frames[i])
+#     elif np.shape(previous_f)[0] == n:
+#          previous_f.pop(0)
+#          previous_f.append(previous_frames[i])
+#     else:
+#         print("Previous frames storage overflow!")
+#         pass
+# # %%
+# # calculate the background with median filter
+# if np.shape(previous_f)[0] < n:
+#     bg = np.zeros([w, h])
+# elif np.shape(previous_f)[0] == n:
+#     bg = np.zeros([w, h])
+#     for i in range(w):
+#         for j in range(h):
+#             median_query = []
+#             for k in range(n):
+#                 median_query.append(previous_f[k][i][j])
+#             bg[i][j] = np.median(median_query)
+# # %%
+# # compare the frame and background to calculate the foreground with threshold
+# threshold = 16
+# fgMask = np.zeros([w, h])
+# for i in range(w):
+#     for j in range(h):
+#         if abs(frame[i][j] - bg[i][j]) > threshold:
+#             fgMask[i][j] = 255
+#         else:
+#             fgMask[i][j] = 0
+# # %%
+# cv2.imshow('fgMask', fgMask); cv2.waitKey(0); cv2.destroyAllWindows()
+# # %%
+# kernel = np.ones((1, 1), np.uint8)
+# fgMask = cv2.erode(fgMask, kernel, iterations=8)
+# kernel = np.ones((2, 2), np.uint8)
+# fgMask = cv2.dilate(fgMask, kernel, iterations=3)
+# # %% bounding box
+# # find the contours and calculate the bounding boxs for objects
+# fgMask = cv2.normalize(src=fgMask, dst=None, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_8UC1)
+# # %%
+# cv2.imshow('fgMask', fgMask); cv2.waitKey(0); cv2.destroyAllWindows()
+#
+# # %%
+# contours, hierarchy = cv2.findContours(fgMask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+# target_contours = []
+# bbx = []
+# centers = []
+# # get the largest 6 contours for 6 people in the video
+# sorted_contours = sorted(contours, key=cv2.contourArea, reverse=True)
+# for i in range(6):
+#     c = sorted_contours[i]
+#     target_contours.append(c)
+#     bbx.append(cv2.boundingRect(c))
+#     x, y, w, h = bbx[-1]
+#     fgMask = cv2.rectangle(fgMask, (x, y), (x + w, y + h), (125, 125, 125), 2)
+#     centers.append([int(x + 0.5*w), int(y + 0.5*h)])
+# cv2.imshow('fgMask', fgMask)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
+# print("Number of Contours found = " + str(len(contours)))
+# print("centroids " + str(centers))
+# # %%
