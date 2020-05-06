@@ -24,6 +24,7 @@ class BGModel(object):
         """
         # Start implementation here
         self.bgmodel = bgmodel
+        self.previous_frames = []
 
     def compute_fgmask(self, frame):
         """Method that implements calculation of the foreground objects
@@ -39,11 +40,11 @@ class BGModel(object):
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         model_flag = self.bgmodel.bgmodel
         if model_flag == "mean":
-            fgMask = createBackgroundSubtractorMEAN(frame)
+            fgMask = createBackgroundSubtractorMEAN(frame, self.previous_frames)
         elif model_flag == "median":
-            fgMask = createBackgroundSubtractorMEDIAN(frame)
+            fgMask = createBackgroundSubtractorMEDIAN(frame, self.previous_frames)
         elif model_flag == "gaussian":
-            fgMask = createBackgroundSubtractorGAUSSIAN(frame)
+            fgMask = createBackgroundSubtractorGAUSSIAN(frame, self.previous_frames)
         elif model_flag == "mog":
             fgMask = cv2.createBackgroundSubtractorMOG2().apply(frame)
         elif model_flag == "knn":
@@ -53,7 +54,7 @@ class BGModel(object):
             pass
         return(fgMask)
 
-def createBackgroundSubtractorMEAN(frame):
+def createBackgroundSubtractorMEAN(frame, previous_frames):
     """Method that implements calculation of the foreground objects with Mean filter method
     Args:
         n is the number of previous frames to calculate the background
@@ -65,11 +66,8 @@ def createBackgroundSubtractorMEAN(frame):
     # tuning args
     n = 3 #the number of previous frames to calculate the background
     threshold = 10 #set the threshold of difference to determine if the pixel belong to foreground
-
     w, h = frame.shape[0], frame.shape[1]
     frame = frame.astype(int)
-    previous_frames = []
-
     # read the previous frames and store them in a n query
     if np.shape(previous_frames)[0] < n:
         previous_frames.append(frame)
@@ -97,12 +95,11 @@ def createBackgroundSubtractorMEAN(frame):
                 fgMask[i][j] = 255
             else:
                 fgMask[i][j] = 0
-
     return(fgMask)
 
 
 
-def createBackgroundSubtractorMEDIAN(frame):
+def createBackgroundSubtractorMEDIAN(frame, previous_frames):
     """Method that implements calculation of the foreground objects with Median filter method
     Args:
         n is the number of previous frames to calculate the background
@@ -117,7 +114,6 @@ def createBackgroundSubtractorMEDIAN(frame):
 
     w, h = frame.shape[0], frame.shape[1]
     frame = frame.astype(int)
-    previous_frames = []
 
     # read the previous frames and store them in a n query
     if np.shape(previous_frames)[0] < n:
@@ -152,10 +148,10 @@ def createBackgroundSubtractorMEDIAN(frame):
 
     return(fgMask)
 
-def createBackgroundSubtractorGAUSSIAN(frame):
+def createBackgroundSubtractorGAUSSIAN(frame, previous_frames):
     w, h = frame.shape[0], frame.shape[1]
     # read previous frames
-    previous_frames = []
+
     # method A: use all frames in the video to build the background model
     # frame_count = 0
     # cap = cv2.VideoCapture("QIL_orig.mp4")
@@ -176,7 +172,7 @@ def createBackgroundSubtractorGAUSSIAN(frame):
     # cap.release()
     # cv2.destroyAllWindows()
     # method two, use the n previous frames to build the background model
-    n = 3 # the number of previous frames to calculate the background
+    n = 10 # the number of previous frames to calculate the background
     frame_count = n
     # read the previous frames and store them in a n query
     if np.shape(previous_frames)[0] < n:
