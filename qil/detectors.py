@@ -53,9 +53,13 @@ class Detectors(object):
         target_contours = []
         bbx = []
         centers = []
-        # get the largest 6 contours for 6 people in the video
+        # get the largest 6 contours for 6 people in the video if contours less than 6 then get the all contours
         sorted_contours = sorted(contours, key=cv2.contourArea, reverse=True)
-        for i in range(6):
+        if len(sorted_contours) < 6:
+            n = len(sorted_contours)
+        else:
+            n = 6
+        for i in range(n):
             c = sorted_contours[i]
             target_contours.append(c)
             bbx.append(cv2.boundingRect(c))
