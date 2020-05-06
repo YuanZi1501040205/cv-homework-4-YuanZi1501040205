@@ -37,15 +37,16 @@ class BGModel(object):
             """
         # Start implementation here and make sure to return foreground image
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        if self.bgmodel == "mean":
+        model_flag = self.bgmodel.bgmodel
+        if model_flag == "mean":
             fgMask = createBackgroundSubtractorMEAN(frame)
-        elif self.bgmodel == "median":
+        elif model_flag == "median":
             fgMask = createBackgroundSubtractorMEDIAN(frame)
-        elif self.bgmodel == "gaussian":
+        elif model_flag == "gaussian":
             fgMask = createBackgroundSubtractorGAUSSIAN(frame)
-        elif self.bgmodel == "mog":
+        elif model_flag == "mog":
             fgMask = cv2.createBackgroundSubtractorMOG2().apply(frame)
-        elif self.bgmodel == "knn":
+        elif model_flag == "knn":
             fgMask = cv2.createBackgroundSubtractorKNN().apply(frame)
         else:
             print("Background model assign Error!")
