@@ -63,7 +63,7 @@ def createBackgroundSubtractorMEAN(frame):
         foreground image should be gray scale images with higher pixel values 255 to represent foreground objects
         """
     # tuning args
-    n = 10 #the number of previous frames to calculate the background
+    n = 3 #the number of previous frames to calculate the background
     threshold = 10 #set the threshold of difference to determine if the pixel belong to foreground
 
     w, h = frame.shape[0], frame.shape[1]
@@ -112,7 +112,7 @@ def createBackgroundSubtractorMEDIAN(frame):
         foreground image should be gray scale images with higher pixel values 255 to represent foreground objects
         """
     # tuning args
-    n = 10 #the number of previous frames to calculate the background
+    n = 3 #the number of previous frames to calculate the background
     threshold = 10 #set the threshold of difference to determine if the pixel belong to foreground
 
     w, h = frame.shape[0], frame.shape[1]
@@ -156,25 +156,37 @@ def createBackgroundSubtractorGAUSSIAN(frame):
     w, h = frame.shape[0], frame.shape[1]
     # read previous frames
     previous_frames = []
-    frame_count = 0
-    cap = cv2.VideoCapture("QIL_orig.mp4")
-    while (True):
-        # Capture frame-by-frame
-        ret, inside_frame = cap.read()
-        if ret:
-            inside_frame = cv2.cvtColor(inside_frame, cv2.COLOR_BGR2GRAY)
-            previous_frames.append(inside_frame)
-            frame_count += 1
-            # Display the original frame
-            cv2.imshow('Original', inside_frame)
-
-            # Slower the FPS
-            cv2.waitKey(1)
-        else:
-            break
-    cap.release()
-    cv2.destroyAllWindows()
-
+    # method A: use all frames in the video to build the background model
+    # frame_count = 0
+    # cap = cv2.VideoCapture("QIL_orig.mp4")
+    # while (True):
+    #     # Capture frame-by-frame
+    #     ret, inside_frame = cap.read()
+    #     if ret:
+    #         inside_frame = cv2.cvtColor(inside_frame, cv2.COLOR_BGR2GRAY)
+    #         previous_frames.append(inside_frame)
+    #         frame_count += 1
+    #         # Display the original frame
+    #         # cv2.imshow('Original', inside_frame)
+    #         #
+    #         # # Slower the FPS
+    #         # cv2.waitKey(1)
+    #     else:
+    #         break
+    # cap.release()
+    # cv2.destroyAllWindows()
+    # method two, use the n previous frames to build the background model
+    n = 3 # the number of previous frames to calculate the background
+    frame_count = n
+    # read the previous frames and store them in a n query
+    if np.shape(previous_frames)[0] < n:
+        previous_frames.append(frame)
+    elif np.shape(previous_frames)[0] == n:
+         previous_frames.pop(0)
+         previous_frames.append(frame)
+    else:
+        print("Previous frames storage overflow!")
+        pass
     # fit gaussian for each pixel and compare each pixel with the gaussian distribution, if frame's difference associate with the mean value over the 1 standard deviation consider it as object
     fgMask = np.zeros([w, h])
     for i in range(w):
