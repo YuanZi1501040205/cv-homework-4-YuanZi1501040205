@@ -64,8 +64,8 @@ def createBackgroundSubtractorMEAN(frame, previous_frames):
         foreground image should be gray scale images with higher pixel values 255 to represent foreground objects
         """
     # tuning args
-    n = 3 #the number of previous frames to calculate the background
-    threshold = 10 #set the threshold of difference to determine if the pixel belong to foreground
+    n = 2 #the number of previous frames to calculate the background
+    threshold = 100 #set the threshold of difference to determine if the pixel belong to foreground
     w, h = frame.shape[0], frame.shape[1]
     frame = frame.astype(int)
     # read the previous frames and store them in a n query
@@ -109,8 +109,8 @@ def createBackgroundSubtractorMEDIAN(frame, previous_frames):
         foreground image should be gray scale images with higher pixel values 255 to represent foreground objects
         """
     # tuning args
-    n = 3 #the number of previous frames to calculate the background
-    threshold = 10 #set the threshold of difference to determine if the pixel belong to foreground
+    n = 2 #the number of previous frames to calculate the background
+    threshold = 15 #set the threshold of difference to determine if the pixel belong to foreground
 
     w, h = frame.shape[0], frame.shape[1]
     frame = frame.astype(int)

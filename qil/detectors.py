@@ -41,12 +41,12 @@ class Detectors(object):
         frame = copy.copy(frame)
         fgMask = BGModel.compute_fgmask(self, frame)
 
-        # # morphological operation to erase the noise resulted by background subtraction
+        # morphological operation to erase the noise resulted by background subtraction
         # kernel = np.ones((1, 1), np.uint8)
         # fgMask = cv2.erode(fgMask, kernel, iterations=8)
         # kernel = np.ones((2, 2), np.uint8)
         # fgMask = cv2.dilate(fgMask, kernel, iterations=3)
-        # convert fgMas to CV_8UC1 format! very important otherwise can not use find contours function
+        #convert fgMas to CV_8UC1 format! very important otherwise can not use find contours function
         fgMask = cv2.normalize(src=fgMask, dst=None, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_8UC1)
 
         # Find contours, sort, get the largest contours convert them to bounding box and calculate their centroids
@@ -57,11 +57,11 @@ class Detectors(object):
         # get the largest 10 contours for 6 people in the video if contours less than 10 then get the all contours
         # limit track max ability to 10 objects
         sorted_contours = sorted(contours, key=cv2.contourArea, reverse=True)
-        # if len(sorted_contours) < 10:
-        #     n = len(sorted_contours)
-        # else:
-        #     n = 10
-        n = len(sorted_contours)
+        if len(sorted_contours) < 3: # ability arguments
+            n = len(sorted_contours)
+        else:
+            n = 3
+        # n = len(sorted_contours)
         for i in range(n):
             c = sorted_contours[i]
             target_contours.append(c)
@@ -69,4 +69,7 @@ class Detectors(object):
             x, y, w, h = bbx[-1]
             fgMask = cv2.rectangle(fgMask, (x, y), (x + w, y + h), (125, 125, 125), 2)
             centers.append([int(x + 0.5 * w), int(y + 0.5 * h)])
+        # cv2.imshow('fgMask', fgMask)
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows()
         return(centers)
