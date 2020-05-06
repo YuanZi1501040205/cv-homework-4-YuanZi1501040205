@@ -57,10 +57,10 @@ class Detectors(object):
         # get the largest 10 contours for 6 people in the video if contours less than 10 then get the all contours
         # limit track max ability to 10 objects
         sorted_contours = sorted(contours, key=cv2.contourArea, reverse=True)
-        if len(sorted_contours) < 3: # ability arguments
+        if len(sorted_contours) < 6: # ability arguments
             n = len(sorted_contours)
         else:
-            n = 3
+            n = 6
         # n = len(sorted_contours)
         for i in range(n):
             c = sorted_contours[i]
