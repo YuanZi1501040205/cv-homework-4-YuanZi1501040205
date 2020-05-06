@@ -172,7 +172,7 @@ def createBackgroundSubtractorGAUSSIAN(frame, previous_frames):
     # cap.release()
     # cv2.destroyAllWindows()
     # method two, use the n previous frames to build the background model
-    n = 10 # the number of previous frames to calculate the background
+    n = 3 # the number of previous frames to calculate the background
     frame_count = n
     # read the previous frames and store them in a n query
     if np.shape(previous_frames)[0] < n:

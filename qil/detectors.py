@@ -49,7 +49,7 @@ class Detectors(object):
         # convert fgMas to CV_8UC1 format! very important otherwise can not use find contours function
         fgMask = cv2.normalize(src=fgMask, dst=None, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_8UC1)
 
-        # Find contours, sort, get the largest 6 contours convert them to bounding box and calculate their centroids
+        # Find contours, sort, get the largest contours convert them to bounding box and calculate their centroids
         contours, hierarchy = cv2.findContours(fgMask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
         target_contours = []
         bbx = []
@@ -57,10 +57,11 @@ class Detectors(object):
         # get the largest 10 contours for 6 people in the video if contours less than 10 then get the all contours
         # limit track max ability to 10 objects
         sorted_contours = sorted(contours, key=cv2.contourArea, reverse=True)
-        if len(sorted_contours) < 10:
-            n = len(sorted_contours)
-        else:
-            n = 10
+        # if len(sorted_contours) < 10:
+        #     n = len(sorted_contours)
+        # else:
+        #     n = 10
+        n = len(sorted_contours)
         for i in range(n):
             c = sorted_contours[i]
             target_contours.append(c)
