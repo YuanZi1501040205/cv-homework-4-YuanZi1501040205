@@ -24,7 +24,7 @@ class Detectors(object):
             None
         """
         self.debug = debug
-        self.fgbg = BGModel(bgmodel)
+        self.bgmodel = BGModel(bgmodel)
 
         # Start implementation here
 
