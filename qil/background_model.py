@@ -52,6 +52,7 @@ class BGModel(object):
         else:
             print("Background model assign Error!")
             pass
+
         return(fgMask)
 
 def createBackgroundSubtractorMEAN(frame, previous_frames):
@@ -109,7 +110,7 @@ def createBackgroundSubtractorMEDIAN(frame, previous_frames):
         foreground image should be gray scale images with higher pixel values 255 to represent foreground objects
         """
     # tuning args
-    n = 10 #the number of previous frames to calculate the background
+    n = 5 #the number of previous frames to calculate the background
     threshold = 10 #set the threshold of difference to determine if the pixel belong to foreground
 
     w, h = frame.shape[0], frame.shape[1]
@@ -172,7 +173,7 @@ def createBackgroundSubtractorGAUSSIAN(frame, previous_frames):
     # cap.release()
     # cv2.destroyAllWindows()
     # method two, use the n previous frames to build the background model
-    n = 10 # the number of previous frames to calculate the background
+    n = 5 # the number of previous frames to calculate the background
     frame_count = n
     # read the previous frames and store them in a n query
     if np.shape(previous_frames)[0] < n:
@@ -189,7 +190,7 @@ def createBackgroundSubtractorGAUSSIAN(frame, previous_frames):
                  for k in range(frame_count):
                      pixel.append(previous_frames[k][i][j])
                  mu, std = norm.fit(pixel)
-                 threshold = std  # For the normal distribution, the values less than one standard deviation away from the mean account for 68.27% of the set;
+                 threshold = 3*std  # For the normal distribution, the values less than one standard deviation away from the mean account for 68.27% of the set;
                  if abs(frame[i][j] - mu) > threshold:
                      fgMask[i][j] = 255
     else:
