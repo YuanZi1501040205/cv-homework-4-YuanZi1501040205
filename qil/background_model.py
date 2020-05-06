@@ -109,7 +109,7 @@ def createBackgroundSubtractorMEDIAN(frame, previous_frames):
         foreground image should be gray scale images with higher pixel values 255 to represent foreground objects
         """
     # tuning args
-    n = 3 #the number of previous frames to calculate the background
+    n = 10 #the number of previous frames to calculate the background
     threshold = 10 #set the threshold of difference to determine if the pixel belong to foreground
 
     w, h = frame.shape[0], frame.shape[1]
@@ -172,28 +172,30 @@ def createBackgroundSubtractorGAUSSIAN(frame, previous_frames):
     # cap.release()
     # cv2.destroyAllWindows()
     # method two, use the n previous frames to build the background model
-    n = 3 # the number of previous frames to calculate the background
+    n = 10 # the number of previous frames to calculate the background
     frame_count = n
     # read the previous frames and store them in a n query
     if np.shape(previous_frames)[0] < n:
         previous_frames.append(frame)
+        fgMask = np.zeros([w, h])
     elif np.shape(previous_frames)[0] == n:
          previous_frames.pop(0)
          previous_frames.append(frame)
+         # fit gaussian for each pixel and compare each pixel with the gaussian distribution, if frame's difference associate with the mean value over the 1 standard deviation consider it as object
+         fgMask = np.zeros([w, h])
+         for i in range(w):
+             for j in range(h):
+                 pixel = []
+                 for k in range(frame_count):
+                     pixel.append(previous_frames[k][i][j])
+                 mu, std = norm.fit(pixel)
+                 threshold = std  # For the normal distribution, the values less than one standard deviation away from the mean account for 68.27% of the set;
+                 if abs(frame[i][j] - mu) > threshold:
+                     fgMask[i][j] = 255
     else:
         print("Previous frames storage overflow!")
         pass
-    # fit gaussian for each pixel and compare each pixel with the gaussian distribution, if frame's difference associate with the mean value over the 1 standard deviation consider it as object
-    fgMask = np.zeros([w, h])
-    for i in range(w):
-        for j in range(h):
-            pixel = []
-            for k in range(frame_count):
-                pixel.append(previous_frames[k][i][j])
-            mu, std = norm.fit(pixel)
-            threshold = std # For the normal distribution, the values less than one standard deviation away from the mean account for 68.27% of the set;
-            if abs(frame[i][j] - mu) > threshold:
-                fgMask[i][j] = 255
+
 
     return(fgMask)
 
