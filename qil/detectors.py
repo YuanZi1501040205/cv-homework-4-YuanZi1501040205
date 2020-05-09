@@ -68,7 +68,7 @@ class Detectors(object):
             bbx.append(cv2.boundingRect(c))
             x, y, w, h = bbx[-1]
             fgMask = cv2.rectangle(fgMask, (x, y), (x + w, y + h), (125, 125, 125), 2)
-            centers.append([int(x + 0.5 * w), int(y + 0.5 * h)])
+            centers.append([[int(x + 0.5 * w)], [int(y + 0.5 * h)]])
         # cv2.imshow('KNN_detection_result', fgMask)
         # cv2.waitKey(0)
         # cv2.destroyAllWindows()
